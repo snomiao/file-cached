@@ -1,7 +1,15 @@
 {
   "name": "file-cached",
-  "module": "index.ts",
   "type": "module",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "release": "tsc && npm version patch && npm publish"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -11,11 +19,5 @@
   "dependencies": {
     "obj-cached": "^0.0.15"
   },
-  "scripts": {
-    "release": "tsc && npm version patch && npm publish"
-  },
-  "files": [
-    "dist"
-  ],
   "version": "0.0.3"
 }
