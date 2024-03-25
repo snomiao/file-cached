@@ -14,5 +14,6 @@
   "scripts": {
     "release": "tsc && npm version patch && npm publish"
   },
+  "files": ["dist"],
   "version": "0.0.1"
 }
