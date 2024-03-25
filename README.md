@@ -1,6 +1,6 @@
 # file-cached
 
-cache your results promises in a json file
+Simply cache your results in ./cache.json file.
 
 ## Usage Example
 
