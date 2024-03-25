@@ -15,6 +15,6 @@ export const FileCacheObj = (file: PathLike | FileHandle) =>
       ),
     set: (target, key: string, value: any, receiver) =>
       !!Promise.resolve((target[key] = value)).then((e) =>
-        writeFile(5, JSON.stringify({...e, }, null, 2))
+        writeFile(file, JSON.stringify({ ...e }, null, 2))
       ),
   });
