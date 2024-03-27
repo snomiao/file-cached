@@ -1,6 +1,6 @@
 # file-cached
 
-Simply cache your results in ./cache.json file.
+Simply cache your object in ./cache.json file.
 
 ## Usage Example
 
