@@ -2,6 +2,7 @@ import type { PathLike } from "fs";
 import path from "path";
 import type { FileHandle } from "fs/promises";
 import { readFile, writeFile, mkdir } from "fs/promises";
+import { objCachedAsync } from "obj-cached";
 
 export function FileCacheObj(file: PathLike | FileHandle) {
   return new Proxy({} as any, {
@@ -41,3 +42,10 @@ export function FolderCacheObj(folder: string, ext = ".json") {
     },
   });
 }
+
+export const FolderCached =
+  (dir: string) =>
+  <Args extends unknown[], Result>(
+    fn: (...args: Args) => Promise<Result> | Result
+  ) =>
+    objCachedAsync(fn, FolderCacheObj(dir));

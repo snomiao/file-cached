@@ -19,7 +19,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "obj-cached": "^0.0.15"
+    "obj-cached": "latest"
   },
   "version": "0.0.8"
 }
