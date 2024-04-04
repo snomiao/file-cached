@@ -11,7 +11,9 @@
     "release": "bun test && tsc && npm version patch && npm publish"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/jest": "^29.5.12",
+    "rambda": "^9.2.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

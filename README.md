@@ -37,3 +37,9 @@ cacheObj["def"] = "456";
 
 console.log(cacheObj["def"]); // 456
 ```
+
+## Spec
+
+Check here [./index.spec.ts](./index.spec.ts)
+
+
