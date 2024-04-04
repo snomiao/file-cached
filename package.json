@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "release": "bun test && tsc && npm version patch && npm publish"
+    "release": "bun test && rm -rf dist && tsc && npm version patch && npm publish"
   },
   "devDependencies": {
     "@types/bun": "latest",
