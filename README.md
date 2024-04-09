@@ -40,4 +40,4 @@ console.log(cacheObj["def"]); // 456
 
 ## Spec
 
-Check here [./index.spec.ts](./index.spec.ts)
+Check spec here [./index.spec.ts](./index.spec.ts)
