@@ -10,9 +10,11 @@ bun i -D semantic-release @semantic-release/changelog
 
 4. npm pkg set scripts.prepack="npm run build"
 
-5. goto https://github.com/${REPO}/settings/actions, allow actions write to workflows
+5. Allow actions write to workflows
+https://github.com/org/repo/settings/actions
 
-6. set NPM_TOKEN in repo secrets
+6. Sdet NPM_TOKEN in repo secrets
+https://github.com/org/repo/settings/secrets/actions
 
 */
 
