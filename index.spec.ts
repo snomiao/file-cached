@@ -9,9 +9,9 @@ import { F, type Fn } from "rambda";
 // };
 
 it("caches object into one json file", async () => {
-  const file = import.meta.dir + "/cache.json";
+  const file = import.meta.dir + "/.cache.json";
 
-  // clean, start from "./cache.json" not existed
+  // clean, start from "./.cache.json" not existed
   await unlink(file).catch(F);
   expect(await stat(file).catch(F)).toBeFalsy();
 
@@ -35,13 +35,13 @@ it("caches object into one json file", async () => {
   await sleep(10);
   expect(await cachedContent()).toEqual({ abc: 123, def: "456" });
 
-  //   await stat('./cache.json').catch(F)
+  //   await stat('./.cache.json').catch(F)
 });
 
 it("caches values into seperated json files", async () => {
-  const dir = import.meta.dir + "/cache";
+  const dir = import.meta.dir + "/.cache";
 
-  // clean, start from "./cache/" not existed
+  // clean, start from "./.cache/" not existed
   await rm(dir, { force: true, recursive: true }).catch(F);
   expect(await stat(dir).catch(F)).toBeFalsy();
 
@@ -67,5 +67,5 @@ it("caches values into seperated json files", async () => {
   expect(await cachedContent("abc")).toEqual(123);
   expect(await cachedContent("def")).toEqual("456");
 
-  //   await stat('./cache.json').catch(F)
+  //   await stat('./.cache.json').catch(F)
 });
