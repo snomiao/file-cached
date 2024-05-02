@@ -8,6 +8,7 @@
     "dist"
   ],
   "scripts": {
+    "build": "tsc",
     "release": "bun test && rm -rf dist && tsc && npm version patch && npm publish"
   },
   "devDependencies": {
