@@ -11,9 +11,11 @@
     "release": "bun test && rm -rf dist && tsc && npm version patch && npm publish"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
     "@types/bun": "latest",
     "@types/jest": "^29.5.12",
-    "rambda": "^9.2.0"
+    "rambda": "^9.2.0",
+    "semantic-release": "^23.0.8"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

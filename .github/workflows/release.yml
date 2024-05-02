@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bun test
+      - run: bun run build
+      - name: Release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: ${{ github.repository_owner }}
+          GIT_AUTHOR_EMAIL: 'ci@example.com'
+          GIT_COMMITTER_NAME: ${{ github.repository_owner }}
+          GIT_COMMITTER_EMAIL: 'ci@example.com'
+        run: npx semantic-release

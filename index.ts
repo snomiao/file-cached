@@ -4,8 +4,11 @@ import type { FileHandle } from "fs/promises";
 import { readFile, writeFile, mkdir } from "fs/promises";
 import { objCachedAsync } from "obj-cached";
 
-export function FileCacheObj(file: PathLike | FileHandle) {
-  return new Proxy({} as any, {
+export function FileCacheObj(
+  file: PathLike | FileHandle,
+  { baseObj = {} as any } = {}
+) {
+  return new Proxy(baseObj, {
     get: async (target, key: string) => {
       const value = target[key];
       if (value) return value;
@@ -22,8 +25,11 @@ export function FileCacheObj(file: PathLike | FileHandle) {
   });
 }
 
-export function FolderCacheObj(folder: string, ext = ".json") {
-  return new Proxy({} as any, {
+export function FolderCacheObj(
+  folder: string,
+  { ext = ".json", baseObj = {} as any } = {}
+) {
+  return new Proxy(baseObj, {
     get: async (target, key: string) => {
       const value = target[key];
       if (value) return value;
@@ -44,8 +50,8 @@ export function FolderCacheObj(folder: string, ext = ".json") {
 }
 
 export const FolderCached =
-  (dir: string) =>
+  (folder: string, { ext = ".json", baseObj = {} as any } = {}) =>
   <Args extends unknown[], Result>(
     fn: (...args: Args) => Promise<Result> | Result
   ) =>
-    objCachedAsync(fn, FolderCacheObj(dir));
+    objCachedAsync(fn, FolderCacheObj(folder, { ext, baseObj }));
