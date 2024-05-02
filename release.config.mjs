@@ -12,6 +12,8 @@ bun i -D semantic-release @semantic-release/changelog
 
 5. goto https://github.com/${REPO}/settings/actions, allow actions write to workflows
 
+6. set NPM_TOKEN in repo secrets
+
 */
 
 /**
