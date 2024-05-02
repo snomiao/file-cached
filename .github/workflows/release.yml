@@ -23,4 +23,4 @@ jobs:
           GIT_AUTHOR_EMAIL: 'ci@example.com'
           GIT_COMMITTER_NAME: ${{ github.repository_owner }}
           GIT_COMMITTER_EMAIL: 'ci@example.com'
-        run: npx semantic-release
+        run: bunx semantic-release
