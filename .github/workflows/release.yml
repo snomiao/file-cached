@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 20 ]
+        node: [20]
     steps:
       - uses: actions/checkout@v4
       - name: Setup node
@@ -24,7 +24,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: ${{ github.repository_owner }}
-          GIT_AUTHOR_EMAIL: 'ci@example.com'
+          GIT_AUTHOR_EMAIL: "ci@example.com"
           GIT_COMMITTER_NAME: ${{ github.repository_owner }}
-          GIT_COMMITTER_EMAIL: 'ci@example.com'
+          GIT_COMMITTER_EMAIL: "ci@example.com"
         run: bunx semantic-release
