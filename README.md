@@ -2,6 +2,8 @@
 
 Simply cache your object in ./cache.json file.
 
+[![Release](https://github.com/snomiao/file-cached/actions/workflows/release.yml/badge.svg)](https://github.com/snomiao/file-cached/actions/workflows/release.yml)
+
 ## Usage Example
 
 ### with obj-cached
@@ -41,3 +43,4 @@ console.log(cacheObj["def"]); // 456
 ## Spec
 
 Check spec here [./index.spec.ts](./index.spec.ts)
+
