@@ -3,7 +3,9 @@ import path from "path";
 import type { FileHandle } from "fs/promises";
 import { readFile, writeFile, mkdir } from "fs/promises";
 import { objCachedAsync } from "obj-cached";
-
+export async function cachedInFile(file: PathLike | FileHandle, fn: () => Promise<string>) {
+  return (await readFile(file, "utf8").catch(() => undefined)) ?? (await fn().then((e) => writeFile(file, e).then(() => e)));;
+}
 export function FileCacheObj(
   file: PathLike | FileHandle,
   { baseObj = {} as any } = {}
@@ -51,7 +53,7 @@ export function FolderCacheObj(
 
 export const FolderCached =
   (folder: string, { ext = ".json", baseObj = {} as any } = {}) =>
-  <Args extends unknown[], Result>(
-    fn: (...args: Args) => Promise<Result> | Result
-  ) =>
-    objCachedAsync(fn, FolderCacheObj(folder, { ext, baseObj }));
+    <Args extends unknown[], Result>(
+      fn: (...args: Args) => Promise<Result> | Result
+    ) =>
+      objCachedAsync(fn, FolderCacheObj(folder, { ext, baseObj }));
