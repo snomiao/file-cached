@@ -7,13 +7,14 @@ const _FILE_CACHED = Symbol("FILE_CACHCED");
 type Store = Map<PathLike | FileHandle, any>;
 type global = { [_FILE_CACHED]: Store };
 (globalThis as unknown as global)[_FILE_CACHED] = new Map();
+
 export async function cachedInFile<T>(
   file: PathLike | FileHandle,
   fn: () => Promise<T>,
   {
     stringify,
     parse,
-  }: { stringify: (data: T) => string; parse: (s: string) => T },
+  }: { stringify: (data: T) => string; parse: (s: string) => T } = JSON,
   cacheObj = (globalThis as unknown as global)[_FILE_CACHED]
 ): Promise<T> {
   const cached =
