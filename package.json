@@ -24,7 +24,7 @@
   "dependencies": {
     "obj-cached": "latest"
   },
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Simply cache your object in ./cache.json file.",
   "keywords": [],
   "author": "",
