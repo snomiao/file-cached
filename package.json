@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "release": "bun test && rm -rf dist && tsc && npm version patch && npm publish"
+    "prepack": "bun test && rm -rf dist && tsc",
+    "release": "bunx standard-version"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
