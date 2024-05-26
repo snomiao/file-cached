@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "prepack": "bun test && rm -rf dist && tsc",
-    "release": "bunx standard-version"
+    "release": "bunx standard-version && git push --follow-tags origin main && npm publish"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -25,7 +25,7 @@
   "dependencies": {
     "obj-cached": "latest"
   },
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Simply cache your object in ./cache.json file.",
   "keywords": [],
   "author": "",
