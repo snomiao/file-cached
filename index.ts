@@ -14,8 +14,12 @@ export async function cachedInFile<T>(
   {
     stringify,
     parse,
-  }: { stringify: (data: T) => string; parse: (s: string) => T } = JSON,
-  cacheObj = (globalThis as unknown as global)[_FILE_CACHED]
+    cacheObj = (globalThis as unknown as global)[_FILE_CACHED],
+  }: {
+    stringify: (data: T) => string;
+    parse: (s: string) => T;
+    cacheObj?: Map<any, any>;
+  } = JSON
 ): Promise<T> {
   const cached =
     cacheObj.get(file) ??
