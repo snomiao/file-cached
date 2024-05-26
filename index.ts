@@ -3,6 +3,7 @@ import path from "path";
 import type { FileHandle } from "fs/promises";
 import { readFile, writeFile, mkdir } from "fs/promises";
 import { objCachedAsync } from "obj-cached";
+import { F } from "rambda";
 const _FILE_CACHED = Symbol("FILE_CACHCED");
 type Store = Map<PathLike | FileHandle, any>;
 type global = { [_FILE_CACHED]: Store };
@@ -15,9 +16,11 @@ export async function cachedInFile<T>(
     stringify,
     parse,
     cacheObj = (globalThis as unknown as global)[_FILE_CACHED],
+    outdateQ = F,
   }: {
     stringify: (data: T) => string;
     parse: (s: string) => T;
+    outdateQ?: (data: T) => boolean;
     cacheObj?: Map<any, any>;
   } = JSON
 ): Promise<T> {
@@ -27,7 +30,7 @@ export async function cachedInFile<T>(
       .then((e) => parse(e))
       .catch(() => undefined));
   return (
-    cached ??
+    (outdateQ(cached) ? null : cached) ??
     (await fn().then(async (t) => {
       cacheObj.set(file, t);
       await writeFile(file, stringify(t));
