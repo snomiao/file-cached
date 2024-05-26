@@ -3,8 +3,8 @@ import path from "path";
 import type { FileHandle } from "fs/promises";
 import { readFile, writeFile, mkdir } from "fs/promises";
 import { objCachedAsync } from "obj-cached";
-export async function cachedInFile(file: PathLike | FileHandle, fn: () => Promise<string>) {
-  return (await readFile(file, "utf8").catch(() => undefined)) ?? (await fn().then((e) => writeFile(file, e).then(() => e)));;
+export async function cachedInFile<T>(file: PathLike | FileHandle, fn: () => Promise<T>, { stringify, parse }: { stringify: (data: T) => string, parse: (s: string) => T }): Promise<T> {
+  return (await readFile(file, "utf8").then(e => parse(e)).catch(() => undefined)) ?? (await fn().then((e) => writeFile(file, stringify(e)).then(() => e)));;
 }
 export function FileCacheObj(
   file: PathLike | FileHandle,
