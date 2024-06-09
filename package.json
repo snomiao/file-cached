@@ -23,6 +23,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "just-curry-it": "^5.3.0",
     "obj-cached": "latest"
   },
   "version": "0.0.16",

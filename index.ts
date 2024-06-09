@@ -1,43 +1,56 @@
 import type { PathLike } from "fs";
 import path from "path";
 import type { FileHandle } from "fs/promises";
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir, stat } from "fs/promises";
 import { objCachedAsync } from "obj-cached";
 import { F } from "rambda";
-const _FILE_CACHED = Symbol("FILE_CACHCED");
-type Store = Map<PathLike | FileHandle, any>;
-type global = { [_FILE_CACHED]: Store };
-(globalThis as unknown as global)[_FILE_CACHED] = new Map();
+import curry from "just-curry-it";
 
-export async function cachedInFile<T>(
-  file: PathLike | FileHandle,
-  fn: () => Promise<T>,
+// default cache obj
+const FILE_CACHED = Symbol("FILE_CACHCED");
+type g = Global & { [FILE_CACHED]: Map<PathLike, any> };
+(global as Global as g)[FILE_CACHED] = new Map();
+
+/**
+ * @param file
+ * @param ttl time to live in ms
+ * @param fn
+ * @returns cached function
+ */
+export const cachedInFile = curry(async function cachedInFile<
+  Args extends any[],
+  R
+>(
   {
-    stringify,
-    parse,
-    cacheObj = (globalThis as unknown as global)[_FILE_CACHED],
-    outdateQ = F,
+    file,
+    /** could be yaml */
+    stringify = (s) => JSON.stringify(s, null, 2),
+    parse = (s) => JSON.parse(s),
+    ttl,
   }: {
-    stringify: (data: T) => string;
-    parse: (s: string) => T;
-    outdateQ?: (data: T) => boolean;
-    cacheObj?: Map<any, any>;
-  } = JSON
-): Promise<T> {
-  const cached =
-    cacheObj.get(file) ??
-    (await readFile(file, "utf8")
-      .then((e) => parse(e))
-      .catch(() => undefined));
-  return (
-    (outdateQ(cached) ? null : cached) ??
-    (await fn().then(async (t) => {
-      cacheObj.set(file, t);
-      await writeFile(file, stringify(t));
-      return t;
-    }))
-  );
-}
+    file: PathLike;
+    ttl?: number;
+    stringify?: (data: R) => string;
+    parse?: (s: string) => R;
+  },
+  fn: (...args: Args) => Promise<R> | R
+) {
+  return async (...args: Args) => {
+    const mtime = (await stat(file)).mtime;
+    const isOutdated = ttl && +Date.now() - +mtime > ttl;
+    const cached = isOutdated
+      ? null
+      : await readFile(file, "utf8")
+          .then((e) => parse(e))
+          .catch(() => undefined);
+    if (cached) return cached;
+
+    const result = await fn(...args);
+    await writeFile(file, stringify(result));
+    return result;
+  };
+});
+
 export function FileCacheObj(
   file: PathLike | FileHandle,
   { baseObj = {} as any } = {}
