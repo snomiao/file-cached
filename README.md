@@ -6,38 +6,54 @@ Simply cache your object in ./cache.json file.
 
 ## Usage Example
 
-### with obj-cached
+### Caching a fetcher function
 
-```typescript
-import { FileCacheObj } from "file-cached";
-import { objCachedAsync } from "obj-cached";
+Here’s a practical example of how you can use the `cachedInFile` function. Let’s say you have a function that fetches data from a remote API, and you want to cache the result to a file to avoid making repeated API calls within a certain time-to-live (TTL) period.
 
-const cacheObj = FileCacheObj(import.meta.dir + "/cache.json");
+1. First, let’s assume you have an async function `fetcher` that retrieves data from an API:
 
-const result = await objCachedAsync(async () => {
-  // do sth heavy
-}, cacheObj)();
+```ts
+async function fetcher(url: string): Promise<any> {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
 ```
 
-### standalone
+2. Now, we'll use the `cachedInFile` function to wrap the `fetcher` function so that the results are cached in a file:
 
-```typescript
-import { FileCacheObj } from "file-cached";
+```ts
+import { cachedInFile } from 'file-cached'; // Adjust import path as necessary
+import path from 'path';
 
-const cacheObj = FileCacheObj(import.meta.dir + "/cache.json");
+const cachedFetcher = cachedInFile(
+  {
+    file: path.resolve(__dirname, 'cache.json'), // File to cache the data
+    ttl: 60000 // Time-to-live: 60 seconds
+  },
+  fetcher
+);
 
-console.log(cacheObj["abc"]); // undefined
-// "./cache.json" not existed
+// Now you can call the cachedFetcher function:
+async function main() {
+  const url = 'https://jsonplaceholder.typicode.com/posts/1';
+  
+  // This will call `fetcher` and then cache the result in 'cache.json'
+  const data1 = await cachedFetcher(url);
+  console.log(data1);
 
-cacheObj["abc"] = 123;
-// "./cache.json" = {abc: 123}
+  // If you call it again within the TTL, it will return the cached result instead of making another API call
+  const data2 = await cachedFetcher(url);
+  console.log(data2);
 
-console.log(cacheObj["abc"]); // 123
+  // Wait for TTL to expire, then it will fetch new data from the API and update the cache
+  setTimeout(async () => {
+    const data3 = await cachedFetcher(url);
+    console.log(data3);
+  }, 61000); // Wait for 61 seconds to make sure TTL has expired
+}
 
-cacheObj["def"] = "456";
-// "./cache.json" = {abc: 123, def: "456"}
-
-console.log(cacheObj["def"]); // 456
+main().catch(console.error);
 ```
 
 ## Spec
